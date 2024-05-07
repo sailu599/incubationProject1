@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Purchase History</title>
+<style>
+ table {
+        border: 1px solid black; /* Add a solid black border around the table */
+        border-collapse: collapse; /* Collapse borders into a single border */
+    }
+    th, td {
+        border: 1px solid black; /* Add a solid black border to table cells */
+        padding: 8px; /* Add padding to the table cells for better spacing */
+    }
+</style>
+</head>
+<body>
+
+<div id="billHistory">
+</div>
+
+<script>
+window.onload = loadBill;
+
+function loadBill() {
+    let customerId = sessionStorage.getItem('userId');
+    fetch("http://localhost:3000/Struts_rest/bill/get?customerId=" + customerId)
+       .then(response => response.json())
+       .then(data => {
+           displayBill(data);
+       })
+      
+}
+
+function displayBill(data) {
+	var billHistoryDiv = document.getElementById('billHistory');
+	
+	data.forEach(bill=>{
+		
+		 var div = document.createElement('div');
+		 div.innerText = "Bill id: " + bill.billId + "    \n\n";
+		 div.innerText += "Purchase Date: " + bill.date + "   \n\n";
+		 div.innerText += "Total: " + bill.total + "   \n\n";
+         var table = document.createElement('table');
+         
+	   	products=bill.products;
+		products.forEach(item=>{
+			 var row = document.createElement('tr');
+             let cell1 = document.createElement('td');
+             let cell2 = document.createElement('td');
+             let cell3 = document.createElement('td');
+             let cell4 = document.createElement('td');
+
+             cell1.innerText = item.productName;
+             cell2.innerText = item.price;
+             cell3.innerText = item.quantity;
+             cell4.innerText = item.price * item.quantity;
+
+             row.appendChild(cell1);
+             row.appendChild(cell2);
+             row.appendChild(cell3);
+             row.appendChild(cell4);
+             table.appendChild(row);
+			
+		})
+	    div.appendChild(table);
+        billHistoryDiv.appendChild(div);
+	})
+	
+}
+</script>
+</body>
+</html>

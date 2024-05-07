@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Manager</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+#updateDiv
+{
+   height:400px;
+   width:500px;
+   background-color:cyan;
+   justify-content:center;
+   position:absolute;
+   top: 5%;
+   left: 25%;
+   display:none;
+   opacity: 1;
+   z-index:1;
+}
+
+#addDiv
+{
+  height:400px;
+  width:500px;
+  background-color:cyan;
+  justify-content:center;
+  position:absolute;
+  top: 5%;
+  left: 25%;
+  display:none;
+  opacity: 1;
+  z-index:2;
+
+}
+table 
+{
+     position:relative;
+     margin-top:75px;
+     margin-left:50px;
+     border-collapse: collapse; /* Collapse borders into a single border */
+     border: 2px solid black; /* Add border to all tables */
+}
+
+table th, table td
+ {
+     border: 1px solid black; /* Add border to table cells */
+     padding: 8px; /* Add padding to improve readability */
+ }
+
+</style>
+</head>
+<body>
+ <div id="updateDiv" >
+ <center>
+  <form id="updateUserForm" >
+  <table>
+  <tr>
+   <td> <label>userName</label> </td>
+   <td> <input type="text" id="userName" name="userName" value=""> </td>
+   </tr>
+   <tr>
+   <td> <label>Gmail</label> </td>
+   <td> <input type="email" id="email" name="email">  </td>
+   </tr>
+   <tr>
+   <td> <label>Password</label> </td>
+   <td>  <input type="password" id="password" name="password"> </td>
+    </tr>
+    <tr>
+    <td>
+    <input type="number" id="userId" name="userId" hidden>
+    <input type="submit" onclick="updateUser()">
+    <td>
+    <tr>
+    </table>
+  </form>
+  </center>
+ </div>
+ 
+ <div id="addDiv" >
+ <center>
+  <form id="addUserForm" >
+  <table>
+  <tr>
+   <td> <label>userName</label> </td>
+   <td> <input type="text" id="userName" name="userName" value=""> </td>
+   </tr>
+   <tr>
+   <td> <label>Email</label> </td>
+   <td> <input type="text" id="email" name="email">  </td>
+   </tr>
+   <tr>
+   <td> <label>Password</label> </td>
+   <td>  <input type="password" id="password" name="password"> </td>
+    </tr>
+    <tr>
+    <td>
+    <input type="submit" onclick="addUser(2)">
+    <td>
+    <tr>
+    </table>
+  </form>
+  </center>
+ </div>
+ 
+ 
+   Managers
+   <button onclick="showAddUserForm( )">AddManager</button>
+   <table id="productDiv">
+   <tr>
+    <th>userId</th>
+    <th>Name</th>
+    <th>Email</th>
+   </tr>
+   </table>
+  
+   
+<script src="../../javaScript/adminHandler.js"></script>
+  <script src="../../javaScript/userHandler.js"></script>
+ 
+   
+</body>
+</html>

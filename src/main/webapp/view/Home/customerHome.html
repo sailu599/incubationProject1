@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>customer</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+customerrr
+
+	 <div class="col-auto text-right">
+      	<a href="../Inventory/displayInventory.html">Products </a>&nbsp
+      	<a href="../Bill/billHistory.html">Purchase History</a>&nbsp
+      	<a href="../Cart/displayCart.html">Cart</a>
+      	<button class="btn btn-primary" onclick="logout()">Logout</button>
+      </div>
+      <br><br>
+      
+     <div class="row"><label class="col" >Wallet Amount</label>  <span class="col" id="amount"></span></div>
+    <div class="row"> <label class="col">CreditPoints</label><span class="col" id="creditPoints"></span>      </div>
+    
+    <button onclick="addAmount()">Add amount</button>
+    <button onClick="redeem()">Redeem</button>
+  <script src="../../javaScript/validator.js"></script>
+<script>
+ window.onload=function()
+  {
+	 validate(3);
+     let walletData;
+     let customerId=sessionStorage.getItem("userId");
+     fetch("http://localhost:3000/Struts_rest/wallet/get?customerId="+customerId)
+     .then(result=>{
+      return  result.json()
+     })
+     .then(wallet=>displayData(wallet))
+    
+  }
+ function displayData(wallet)
+  {
+	  sessionStorage.setItem("walletAmount",wallet.amount);
+	  console.log(wallet);
+	  document.getElementById("amount").innerText=wallet.amount;
+	     document.getElementById("creditPoints").innerText=wallet.creditPoints;
+  }
+  
+  function addAmount()
+  {
+	  let amount=prompt("ENTER THE AMOUNT TO ADD ");
+	  
+	  let queryParams = {
+			    amount: amount,
+			    customerId: sessionStorage.getItem('userId')
+			};
+	  let searchParams = new URLSearchParams(queryParams);
+	  
+	  
+	  fetch("http://localhost:3000/Struts_rest/wallet/update?"+searchParams.toString())
+	  .then(response=>{
+		  if(response.ok)
+			  {
+			   alert("amount added successfully");
+		       window.location.reload();
+			  }
+		  else
+			  {
+			   alert("somehting went wring try again later");
+			  }
+	  })
+	  .catch(error=>{
+		  alert(error);
+	  })
+  }
+  
+  
+  function redeem()
+  {
+	  customerId= sessionStorage.getItem('userId');
+      fetch("http://localhost:3000/Struts_rest/wallet/redeem?customerId="+customerId)
+      .then(result=>{
+    	  if(result.ok)
+    		  window.location.reload();
+    	  else
+    		   alert("redeem failed");
+      })
+      .error(error=>{
+    	  alert("error in reeding the page");
+      })
+  }
+</script>
+</body>
+</html>

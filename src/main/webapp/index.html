@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <br><br><nr><br><br><nr>
+<div class="container mt-100">
+    <div class="row" ml-500>
+        <div class="col-md-8 offset-md-2">
+            <form>
+                <div class="mb-3">
+                    <label for="userName" class="form-label">Enter your name</label>
+                    <input class="form-control form-control-sm col-5" type="text" id="userName" placeholder="Enter your name">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Enter your password</label>
+                    <input class="form-control form-control-sm col-5" type="password" id="password" placeholder="Enter your password">
+                </div>
+                <div class>
+                    <div class="col-sm text-center">
+                        <button class="btn btn-primary btn" type="submit" onclick="login(event)">Login</button>
+                        <a href="view/signUp.html" class="btn btn-secondary btn">Signup</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    <script src="javaScript/validator.js"></script>
+    <script>
+    
+      window.onload=function()
+      {
+    	  sessionStorage.clear();
+      }
+       function login(e)
+       {
+    	  e.preventDefault();
+    	  let userName=document.getElementById('userName').value;
+    	  let password=document.getElementById('password').value;
+    	  const queryParams=new URLSearchParams();
+    	  queryParams.append("userName",userName);
+    	  queryParams.append("password",password);
+    	 
+    	  let url = `http://localhost:3000/Struts_rest/user/authenticate?${queryParams.toString()}`;
+    	  authenticate(url,userName);
+       }
+       
+       async function authenticate(url,userName)
+       {
+    	  try{
+    		  let response = await  fetch(url);
+	    	
+	    	if(response.ok)
+	    	{
+				      let data=await response.json();
+	    	          let role= data.role;
+	    	          sessionStorage.setItem('userId',data.userId);
+	    	          sessionStorage.setItem('role',role);
+	    	          switch(role)
+	    	          {
+	    	          case 1:
+	    	        	  window.location.href="view/Home/adminHome.html";
+	    	        	  break;
+	    	          case 2:
+	    	        	  window.location.href="view/Home/adminHome.html";
+	    	        	  break;
+	    	          case 3:
+	    	        	  window.location.href="view/Home/customerHome.html";
+	    	          }
+	    	}
+	    	else
+	    	{
+	    		alert("login unsuccessfull");
+	    	}
+    	  }
+    	  catch(execption)
+    	  {
+    		  alert(execption);
+    		  alert("invalid credentials login unsuccessfull");
+    	  }
+    	   
+       }
+    </script>
+</body>
+</html>

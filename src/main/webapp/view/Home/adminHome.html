@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin page</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+  /* CSS to add inner borders */
+  .table-bordered tbody tr td,
+  .table-bordered thead tr th {
+    border: 1px solid #dee2e6; /* Adjust the color and thickness as needed */
+  }
+</style>
+</head>
+<body>
+<div class="row">
+
+	 <div class="col ml-5" >
+	 <span class="bg-gradient-dark" id="header">
+		 Admin Page
+	 </span>
+	 </div>
+	 
+	 <div class="col-auto text-right">
+      	<a href="../Inventory/displayInventory.html">Products </a>
+      </div>
+      
+      <div class="col-auto text-right mr-5" id="navbar">
+      	<a href="../User/user.html">Managers</a></td>
+      </div>
+      <div class="col-auto text-right mr-5" >
+      	<button class="btn btn-primary" onclick="logout()">Logout </button>
+      </div>
+ </div>
+   
+ 
+  <div class="container  d-flex justify-content-center align-items-center container-height mt-20">
+        <div class="card">
+
+            <div class="card-body">
+                <h5 class="card-title">Alert</h5>
+                <p class="card-text" id="warning">NOTHING TO SHOW</p>
+                <table class="table" id="alertTable" style="display:none;">
+                     <tr >
+                           <th>id</th> 
+                          <th>productName</th> 
+                          <th>quantity</th>
+                     </tr>
+                </table>
+                
+                <a href="../Inventory/displayInventory.html" class="btn btn-primary">Update</a>
+            </div>
+        </div>
+    </div>
+    
+   
+   <div  class="table-responsive">
+  <h4 class="font-weight-bold mb-4">Top Selling Products in Last 5 Days</h4>
+  <table class="table table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th class="col">Product Name</th>
+        <th class="col-2">Quantity Sold</th>
+      </tr>
+    </thead>
+    <tbody id="topSalesHolder">
+    </tbody>
+  </table>
+</div>
+
+<script src="../../javaScript/validator.js"></script>
+<script>
+window.onload=async function()
+{
+	 let role=sessionStorage.getItem('role');
+	 validate(1);
+	 const response=await fetch("http://localhost:3000/Struts_rest/inventory/getMin");
+	 const json=await response.json();
+	 if(role==2)
+		 {
+		   document.title="Manager";
+		   document.getElementById('header').innerText="Manager Page";
+		   document.getElementById('navbar').style.display="none";
+		 }
+	 if(json.length>0)
+		 {
+		  
+		    let alertTable=document.getElementById("alertTable");
+		    alertTable.style.display="block";
+		    document.getElementById("warning").innerText="these products  needs to be updated!!!!";
+		    json.forEach((data)=>{
+	    		
+	    		let row=document.createElement('tr');
+	    		
+	    		
+	    		let cell1=document.createElement('td');
+	    		let cell2=document.createElement('td');
+	    		let cell3=document.createElement('td');
+	    		
+	    		
+	    		cell1.innerText=data.productId;
+	    		cell2.innerText=data.productName;
+	    		cell3.innerText=data.quantity;
+
+	    		row.appendChild(cell1);
+	    		row.appendChild(cell2);
+	    		row.appendChild(cell3);
+	    		
+	    		alertTable.appendChild(row);
+	    		
+	    	})
+		
+		 }
+	
+	 displayTopSales();
+	 
+}
+
+function displayTopSales()
+{
+	let parentDiv=document.getElementById("topSalesHolder");
+	fetch("http://localhost:3000/Struts_rest/inventory/topSale")
+	.then(response=>{
+		return response.json();
+	})
+	.then(data=>{
+		for (const [productName, quantity] of Object.entries(data)) {
+			
+			let row=document.createElement('tr');
+		
+			let col1=document.createElement('td');
+			let col2=document.createElement('td');
+			
+			col1.className="col";
+			col2.className="col";
+			
+			col1.innerText=productName;
+			col2.innerText=quantity;
+			
+			row.appendChild(col1);
+			row.appendChild(col2);
+			parentDiv.appendChild(row);
+			console.log("working");
+			}
+	})
+	.catch(error=>console.log(error))
+}
+
+</script>
+</body>
+</html>
